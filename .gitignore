@@ -53,3 +53,19 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# project binaries
+cliente
+analista
+
+# test binaries
+tests/test_*
+
+# generated object files
+src/*.o
+tests/*.o
+
+# runtime files
+demanda.txt
+lng.txt
+pidanalista.txt
