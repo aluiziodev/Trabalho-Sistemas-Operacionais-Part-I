@@ -7,8 +7,8 @@
 
 typedef struct {
     pid_t pid;
-    long arrival_ms;
-    int priority;
+    long chegada_ms;
+    int prioridade;
     int service;
     long deadline_ms;
 } client_t;
@@ -18,13 +18,13 @@ typedef struct {
     int count;
 } queue_t;
 
-long patience_ms(int priority, long x);
-client_t client_make(pid_t pid, long arrival, int prio, int service, long x);
-void queue_init(queue_t *q);
-int queue_push(queue_t *q, client_t client);
-int queue_size(const queue_t *q);
-int queue_full(const queue_t *q);
-int queue_pop_best(queue_t *q, long now, client_t *out);
-int is_satisfied(const client_t *c, long finish_ms);
+long paciencia_ms(int prioridade, long x);
+client_t client_make(pid_t pid, long chegada, int prioridade, int service, long x);
+void fila_iniciar(queue_t *q);
+int fila_push(queue_t *q, client_t client);
+int fila_tamanho(const queue_t *q);
+int fila_cheia(const queue_t *q);
+int fila_pop_melhor(queue_t *q, long now, client_t *out);
+int esta_satisfeito(const client_t *c, long finish_ms);
 
 #endif
