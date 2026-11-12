@@ -18,7 +18,7 @@ typedef struct {
     int satisfied;
 
     //sinais entre threads
-    volatile int stop; // tecla 's'
+    volatile int parar; // tecla 's'
     volatile int recepcao_concluida; //recepcao terminou de criar clientes
     volatile int fatal; // erro irrecuperavel (ex.: ./cliente ausente)
 } app_t;
