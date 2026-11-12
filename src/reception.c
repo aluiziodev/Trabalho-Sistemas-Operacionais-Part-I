@@ -16,7 +16,7 @@ static sem_t *criar_sem(const char *name)
     return sem_open(name, O_CREAT | O_RDWR, 0644, 1);
 }
 
-enum { CLIENT_DIED = 0, CLIENT_STOPPED = 1, CLIENT_NO_EXEC = -1 };
+enum { CLIENTE_MORREU = 0, CLIENTE_PAROU = 1, CLIENTE_NO_EXEC = -1 };
 
 //Espera o cliente parar (SIGSTOP)
 static int esperar_parada(pid_t pid)
@@ -26,10 +26,10 @@ static int esperar_parada(pid_t pid)
         pid_t r = waitpid(pid, &st, WUNTRACED | WNOHANG);
         if (r == pid) {
             if (WIFSTOPPED(st))
-                return CLIENT_STOPPED;
+                return CLIENTE_PAROU;
             if (WIFEXITED(st) && WEXITSTATUS(st) == 127)
-                return CLIENT_NO_EXEC;
-            return CLIENT_DIED;
+                return CLIENTE_NO_EXEC;
+            return CLIENTE_MORREU;
         }
         thread_yield();
     }
@@ -59,17 +59,17 @@ void recepcao_thread(void *arg)
     if (app->sem_atend == SEM_FAILED || app->sem_block == SEM_FAILED) {
         perror("sem_open");
         app->fatal = 1;
-        app->stop = 1;
-        app->reception_done = 1;
+        app->parar = 1;
+        app->recepcao_concluida = 1;
         return;
     }
 
-    while ((app->n == 0 || app->created < app->n) && !app->stop) {
+    while ((app->n == 0 || app->created < app->n) && !app->parar) {
         // Espera até que haja espaço na fila
-        while (fila_cheia(&app->q) && !app->stop)
+        while (fila_cheia(&app->q) && !app->parar)
             thread_yield();
 
-        if (app->stop)
+        if (app->parar)
             break;
 
         long arrival = now_ms();
@@ -83,13 +83,13 @@ void recepcao_thread(void *arg)
             break;
         }
         int w = esperar_parada(pid);
-        if (w == CLIENT_NO_EXEC) {
+        if (w == CLIENTE_NO_EXEC) {
             fprintf(stderr, "erro: ./cliente nao encontrado ou nao executavel\n");
             app->fatal = 1;
-            app->stop = 1;
+            app->parar = 1;
             break;
         }
-        if (w == CLIENT_DIED)
+        if (w == CLIENTE_MORREU)
             continue;   // cliente morreu: nao entra na fila 
 
         int service = ler_servico();
@@ -98,5 +98,5 @@ void recepcao_thread(void *arg)
         app->created++;
     }
 
-    app->reception_done = 1;
+    app->recepcao_concluida = 1;
 }
