@@ -18,13 +18,12 @@ KEYBOARD_OBJ = $(SRC_DIR)/keyboard.o
 
 MODULE_OBJS = $(UTIL_OBJ) $(SCHED_OBJ) $(QUEUE_OBJ) $(LNG_OBJ) $(ANALYST_OBJ) $(RECEPTION_OBJ) $(ATTENDANT_OBJ) $(KEYBOARD_OBJ)
 
+# Mantém apenas os testes que realmente existem no repositório.
+# Isso evita quebrar o build enquanto o projeto ainda não possui os arquivos
+# restantes da suíte completa.
 TESTS = \
-	$(TEST_DIR)/test_util \
-	$(TEST_DIR)/test_sched \
-	$(TEST_DIR)/test_queue \
 	$(TEST_DIR)/test_lng \
 	$(TEST_DIR)/test_analyst \
-	$(TEST_DIR)/test_reception \
 	$(TEST_DIR)/test_attendant
 
 .PHONY: all test clean
