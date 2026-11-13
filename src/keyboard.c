@@ -71,7 +71,7 @@ void teclado_run(void *arg) {
 
 void teclado_restore(void) {
     if (teclado_fd >= 0 && terminal_salvo_valido) {
-        tcsetattr(teclado_fd, TCSANOW, &terminal_salvo);
+        tcsetattr(teclado_fd, TCSAFLUSH, &terminal_salvo);
         terminal_salvo_valido = 0;
     }
 
