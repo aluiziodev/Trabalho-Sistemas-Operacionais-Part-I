@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+*.vscode/
 
 # Object files
 *.o
@@ -57,6 +58,7 @@ dkms.conf
 # project binaries
 cliente
 analista
+atendimento
 
 # test binaries
 tests/test_*

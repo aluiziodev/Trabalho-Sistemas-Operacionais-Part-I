@@ -3,7 +3,7 @@
 
 #include "app.h"
 
-void keyboard_run(app_t *app);
-void keyboard_restore(void);
+void teclado_run(void *arg);
+void teclado_restore(void);
 
 #endif

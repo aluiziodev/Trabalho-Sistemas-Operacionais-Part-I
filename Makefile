@@ -6,6 +6,7 @@ TEST_DIR = tests
 
 CLIENTE = cliente
 ANALISTA = analista
+ATENDIMENTO = atendimento
 
 UTIL_OBJ = $(SRC_DIR)/util.o
 SCHED_OBJ = $(SRC_DIR)/sched.o
@@ -28,13 +29,16 @@ TESTS = \
 
 .PHONY: all test clean
 
-all: $(CLIENTE) $(ANALISTA) $(TESTS)
+all: $(CLIENTE) $(ANALISTA) $(ATENDIMENTO) $(TESTS)
 
 $(CLIENTE): $(SRC_DIR)/cliente.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 $(ANALISTA): $(SRC_DIR)/analista.c
 	$(CC) $(CFLAGS) -o $@ $^
+
+$(ATENDIMENTO): $(SRC_DIR)/atendimento.c $(UTIL_OBJ) $(SCHED_OBJ) $(QUEUE_OBJ) $(LNG_OBJ) $(ANALYST_OBJ) $(RECEPTION_OBJ) $(ATTENDANT_OBJ) $(KEYBOARD_OBJ)
+	$(CC) $(CFLAGS) -o $@ $(SRC_DIR)/atendimento.c $(UTIL_OBJ) $(SCHED_OBJ) $(QUEUE_OBJ) $(LNG_OBJ) $(ANALYST_OBJ) $(RECEPTION_OBJ) $(ATTENDANT_OBJ) $(KEYBOARD_OBJ)
 
 $(UTIL_OBJ): $(SRC_DIR)/util.c $(SRC_DIR)/util.h
 	$(CC) $(CFLAGS) -c -o $@ $(SRC_DIR)/util.c
@@ -88,5 +92,5 @@ test: all
 	done
 
 clean:
-	rm -f $(CLIENTE) $(ANALISTA) $(TESTS) $(MODULE_OBJS)
+	rm -f $(CLIENTE) $(ANALISTA) $(ATENDIMENTO) $(TESTS) $(MODULE_OBJS)
 	rm -f demanda.txt lng.txt pidanalista.txt tmp_lng_test.txt
