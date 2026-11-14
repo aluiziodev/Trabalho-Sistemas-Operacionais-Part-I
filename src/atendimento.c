@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "analyst_ctl.h"
 #include "app.h"
@@ -160,7 +161,8 @@ int main(int argc, char **argv) {
         sem_unlink(SEM_BLOCK_NAME);
         return 1;
     }
-
+    
+    srand((unsigned)time(NULL));
     iniciar_escalonador();
     criar_thread(recepcao_thread, &aplicacao);
     criar_thread(atendente_thread, &aplicacao);
@@ -189,5 +191,5 @@ int main(int argc, char **argv) {
     printf("Tempo total: %ld ms\n", now_ms());
 
     aplicacao_global = NULL;
-    return 0;
+    return aplicacao.fatal ? 1: 0;
 }
