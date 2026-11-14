@@ -44,7 +44,7 @@ void iniciar_escalonador(void) {
 
 //Função para criar uma thread
 int criar_thread(void (*fn)(void *), void *arg) {
-    int idx = -1;
+    volatile int idx = -1;
     
     for(int i = 0; i < nthreads; i++) {
         if (threads[i].finalizado) {
