@@ -27,9 +27,15 @@ TESTS = \
 	$(TEST_DIR)/test_analyst \
 	$(TEST_DIR)/test_attendant
 
-.PHONY: all test clean
+.PHONY: all test clean bench bench-polling
 
 all: $(CLIENTE) $(ANALISTA) $(ATENDIMENTO) $(TESTS)
+
+bench:
+	./bench.sh
+
+bench-polling:
+	./polling_bench.sh
 
 $(CLIENTE): $(SRC_DIR)/cliente.c
 	$(CC) $(CFLAGS) -o $@ $^
