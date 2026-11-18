@@ -55,6 +55,14 @@ int fila_pop_melhor(queue_t *q, long now, client_t *out) {
     }
 
     int indice_melhor = 0;
+
+#ifdef POLICY_FIFO
+    for (int i = 1; i < q->count; ++i) {
+        if (q->items[i].chegada_ms < q->items[indice_melhor].chegada_ms) {
+            indice_melhor = i;
+        }
+    }
+#else
     int encontrou_viavel = 0;
 
     for (int i = 0; i < q->count; ++i) {
@@ -69,13 +77,13 @@ int fila_pop_melhor(queue_t *q, long now, client_t *out) {
     }
 
     if (!encontrou_viavel) {
-        indice_melhor = 0;
         for (int i = 1; i < q->count; ++i) {
             if (q->items[i].chegada_ms < q->items[indice_melhor].chegada_ms) {
                 indice_melhor = i;
             }
         }
     }
+#endif
 
     if (out != NULL) {
         *out = q->items[indice_melhor];
